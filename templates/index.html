@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    /* Set the background color of the entire page to black */
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: black;  /* Set background to black */
+        color: white;  /* Set text color to white for visibility */
+    }
+
+    /* Center and style the container */
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #1c1c1c;  /* Dark background for the container */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Style for the heading */
+    h1 {
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #f1f1f1;  /* Light color for the heading */
+    }
+
+    /* Style for the textarea */
+    textarea {
+        width: 100%;
+        height: 150px;
+        padding: 15px;
+        font-size: 16px;
+        margin-bottom: 20px;
+        border: 1px solid #444;
+        border-radius: 8px;
+        resize: vertical;
+        background-color: #333;  /* Darker background for textarea */
+        color: white;  /* White text for visibility */
+    }
+
+    /* Style for the submit button */
+    button {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        background-color: #007bff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    /* Hover effect for the submit button */
+    button:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    /* Active state for the submit button */
+    button:active {
+        background-color: #004085;
+    }
+
+    /* Style for the result text */
+    .result {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        color: #f1f1f1;  /* Light color for result */
+    }
+</style>
+
+<div class="container">
+    <h1>Spam Detection</h1>
+    <textarea id="message" placeholder="Enter your message here..."></textarea>
+    <button onclick="predict()">Check for Spam</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    async function predict() {
+        const message = document.getElementById('message').value;
+        const response = await fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `message=${encodeURIComponent(message)}`,
+        });
+        const data = await response.json();
+        document.getElementById('result').innerText = `Prediction: ${data.prediction}`;
+    }
+</script>
+
+{% endblock %}
